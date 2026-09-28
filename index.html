@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador del movimiento molecular</title>
+<style>
+:root{--bg:#111827;--panel:#1f2937;--text:#f3f4f6;--muted:#cbd5e1;--accent:#a78bfa;--accent2:#38bdf8}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#0f172a,#172033);color:var(--text)}
+header{padding:28px 20px;text-align:center;background:#111827;border-bottom:2px solid #334155}h1{margin:0 0 8px;font-size:clamp(26px,5vw,44px)}header p{margin:0;color:var(--muted)}
+.container{max-width:1150px;margin:auto;padding:22px}.grid{display:grid;grid-template-columns:330px 1fr;gap:20px}.card{background:rgba(31,41,55,.96);border:1px solid #475569;border-radius:18px;padding:20px;box-shadow:0 12px 30px #0004}
+label{font-weight:bold;display:block;margin:14px 0 7px}select,input[type=range]{width:100%}select{padding:11px;border-radius:10px;background:#111827;color:white;border:1px solid #64748b}
+input[type=range]{accent-color:var(--accent);cursor:pointer}.energy{font-size:24px;font-weight:bold;color:var(--accent);text-align:center}.badge{text-align:center;padding:10px;border-radius:12px;background:#334155;margin-top:14px;font-weight:bold}
+canvas{width:100%;height:500px;display:block;background:#0b1220;border-radius:14px}.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;color:var(--muted);font-size:14px}.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#a78bfa;margin-right:6px}.dot2{background:#38bdf8}
+section{margin-top:20px}table{width:100%;border-collapse:collapse;background:var(--panel);overflow:hidden;border-radius:14px}th,td{padding:12px;border:1px solid #475569;text-align:left;vertical-align:top}th{background:#334155}h2{margin-top:0;color:#c4b5fd}.note{color:var(--muted);line-height:1.55}.expo{line-height:1.65}
+button{padding:10px 14px;border:0;border-radius:10px;background:var(--accent);font-weight:bold;cursor:pointer;margin-top:10px}
+@media(max-width:800px){.container{padding:12px}.grid{grid-template-columns:1fr}.card{padding:16px}canvas{height:380px}table{display:block;overflow-x:auto;white-space:normal}th,td{min-width:170px}.legend{font-size:13px}}
+@media(max-width:480px){header{padding:22px 14px}h1{font-size:28px}.container{padding:10px}.card{border-radius:14px}canvas{height:330px}button{width:100%;padding:13px}}
+</style>
+</head>
+<body>
+<header><h1>Simulador del movimiento molecular</h1><p>Observa cómo cambia la materia cuando aumenta o disminuye la energía de sus partículas.</p></header>
+<div class="container">
+<div class="grid">
+<div class="card"><h2>Control de energía</h2>
+<label for="state">Estado de agregación</label>
+<select id="state"><option value="solid">Sólido</option><option value="liquid">Líquido</option><option value="gas">Gas</option><option value="plasma">Plasma</option></select>
+<label for="energy">Nivel energético: <span id="energyText">20</span>%</label>
+<input id="energy" type="range" min="0" max="100" value="20">
+<div class="energy" id="energyLabel">Baja energía</div><div class="badge" id="description">Partículas muy juntas y con vibraciones pequeñas.</div>
+<button id="pause">Pausar movimiento</button></div>
+<div class="card"><canvas id="canvas"></canvas><div class="legend"><span><i class="dot"></i>Partículas de materia</span><span><i class="dot dot2"></i>Partículas ionizadas en plasma</span></div></div>
+</div>
+<section class="card"><h2>¿Qué está pasando?</h2><p class="note" id="explanation"></p></section>
+<section class="card"><h2>Propiedades de la materia</h2><p class="note">Las propiedades intensivas no dependen de la cantidad de materia. Las propiedades específicas ayudan a caracterizar una sustancia, como densidad, punto de fusión y punto de ebullición.</p>
+<table><thead><tr><th>Estado</th><th>Forma y volumen</th><th>Movimiento de partículas</th><th>Propiedades características</th></tr></thead><tbody>
+<tr><td><b>Sólido</b></td><td>Tiene forma y volumen definidos.</td><td>Partículas muy juntas que vibran alrededor de posiciones casi fijas.</td><td>Alta cohesión, baja compresibilidad, densidad y punto de fusión.</td></tr>
+<tr><td><b>Líquido</b></td><td>Volumen definido y forma del recipiente.</td><td>Partículas próximas que pueden deslizarse.</td><td>Fluidez, viscosidad, tensión superficial, densidad y punto de ebullición.</td></tr>
+<tr><td><b>Gas</b></td><td>No tiene forma ni volumen definidos.</td><td>Partículas muy separadas y rápidas.</td><td>Alta compresibilidad, baja densidad, expansión y presión.</td></tr>
+<tr><td><b>Plasma</b></td><td>No tiene forma ni volumen definidos; es gas ionizado.</td><td>Partículas con mucha energía; iones y electrones libres.</td><td>Conductividad eléctrica y respuesta a campos electromagnéticos.</td></tr>
+</tbody></table></section>
+<section class="card"><h2>Definiciones para la investigación</h2><ul class="note">
+<li><b>Propiedades intensivas:</b> no cambian al aumentar o disminuir la cantidad de materia. Ejemplos: densidad, temperatura, presión y punto de ebullición.</li>
+<li><b>Propiedades específicas:</b> propiedades que permiten caracterizar o distinguir una sustancia. Ejemplos: densidad, solubilidad, punto de fusión y punto de ebullición.</li>
+<li><b>Propiedades extensivas:</b> dependen de la cantidad de materia. Ejemplos: masa, volumen y longitud.</li>
+</ul></section>
+<section class="card expo"><h2>Exposición personal: Estados de agregación</h2>
+<p>Los estados de agregación son las diferentes formas en las que puede presentarse la materia. Los principales son sólido, líquido, gas y plasma. La diferencia entre ellos se relaciona con la energía y el movimiento de sus partículas.</p>
+<p>En el <b>estado sólido</b>, las partículas están muy juntas y vibran, por eso mantienen una forma y un volumen definidos. En el <b>estado líquido</b>, tienen más libertad de movimiento y pueden deslizarse, por lo que conservan su volumen pero adoptan la forma del recipiente.</p>
+<p>En el <b>estado gaseoso</b>, las partículas están muy separadas y se mueven rápidamente. Por eso un gas no tiene forma ni volumen propios y puede comprimirse. Con mucha energía puede aparecer el <b>plasma</b>, donde existen partículas ionizadas, como en el Sol.</p>
+<p>El simulador permite observar esta idea de manera visual: al aumentar la energía, las partículas se mueven más rápido; al disminuirla, su movimiento se reduce.</p></section>
+</div>
+<script>
+const canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d"),stateSel=document.getElementById("state"),energy=document.getElementById("energy"),energyText=document.getElementById("energyText"),energyLabel=document.getElementById("energyLabel"),desc=document.getElementById("description"),explanation=document.getElementById("explanation"),pauseBtn=document.getElementById("pause");
+let particles=[],paused=false;
+function resize(){const dpr=window.devicePixelRatio||1,r=canvas.getBoundingClientRect();canvas.width=r.width*dpr;canvas.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}window.addEventListener("resize",resize);resize();
+function makeParticles(){particles=[];for(let i=0;i<64;i++)particles.push({x:Math.random()*canvas.clientWidth,y:Math.random()*canvas.clientHeight,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2,r:5+Math.random()*2})}makeParticles();
+function updateText(){let e=+energy.value,s=stateSel.value;energyText.textContent=e;energyLabel.textContent=e<30?"Baja energía":e<65?"Energía media":"Alta energía";const d={solid:["Partículas muy juntas y con vibraciones pequeñas.","En un sólido, las partículas permanecen próximas y vibran alrededor de posiciones casi fijas."],liquid:["Partículas cercanas que se deslizan entre sí.","En un líquido, las partículas están próximas, pero pueden cambiar de posición."],gas:["Partículas separadas y con movimiento rápido.","En un gas, las partículas están muy separadas y se mueven rápidamente en todas direcciones."],plasma:["Partículas muy energéticas e ionizadas.","El plasma es un gas con tanta energía que parte de sus átomos pierde electrones y se forman iones y electrones libres."]}[s];desc.textContent=d[0];explanation.textContent=d[1]+" El nivel de energía controla principalmente la rapidez del movimiento en esta representación."}
+stateSel.onchange=()=>{makeParticles();updateText()};energy.oninput=updateText;pauseBtn.onclick=()=>{paused=!paused;pauseBtn.textContent=paused?"Reanudar movimiento":"Pausar movimiento"};updateText();
+function draw(){const w=canvas.clientWidth,h=canvas.clientHeight;ctx.clearRect(0,0,w,h);const s=stateSel.value,e=+energy.value,speed=.15+e/22;
+particles.forEach((p,i)=>{if(!paused){if(s==="solid"){const cols=8,gap=Math.min(w,h)/11,ox=w/2-(cols-1)*gap/2,oy=h/2-(cols-1)*gap/2,tx=ox+(i%cols)*gap,ty=oy+Math.floor(i/cols)*gap;p.vx+=(tx-p.x)*.004;p.vy+=(ty-p.y)*.004;p.vx*=.90;p.vy*=.90}else if(s==="liquid"){p.vx+=(Math.random()-.5)*.05;p.vy+=(Math.random()-.5)*.05;p.vx*=.98;p.vy*=.98}else{p.vx+=(Math.random()-.5)*.12;p.vy+=(Math.random()-.5)*.12;p.vx*=.995;p.vy*=.995}const mag=Math.hypot(p.vx,p.vy)||1,desired=s==="solid"?speed*.35:s==="liquid"?speed*.65:s==="gas"?speed:speed*1.25;p.vx=p.vx/mag*desired;p.vy=p.vy/mag*desired;p.x+=p.vx;p.y+=p.vy;if(s==="solid"){if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0}else{if(p.x<p.r||p.x>w-p.r)p.vx*=-1;if(p.y<p.r||p.y>h-p.r)p.vy*=-1;p.x=Math.max(p.r,Math.min(w-p.r,p.x));p.y=Math.max(p.r,Math.min(h-p.r,p.y))}}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=s==="plasma"?(i%2?"#38bdf8":"#a78bfa"):"#a78bfa";ctx.fill()});requestAnimationFrame(draw)}requestAnimationFrame(draw);
+</script>
+</body></html>
